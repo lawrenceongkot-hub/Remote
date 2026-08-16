@@ -1,0 +1,24 @@
+{
+  "name": "remote-support",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/shared",
+    "packages/server",
+    "packages/web"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace @remote-support/server",
+    "dev:web": "npm run dev --workspace @remote-support/web",
+    "build": "npm run build --workspace @remote-support/shared && npm run build --workspace @remote-support/server && npm run build --workspace @remote-support/web",
+    "typecheck": "npm run typecheck --workspace @remote-support/shared && npm run typecheck --workspace @remote-support/server && npm run typecheck --workspace @remote-support/web",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "allowScripts": {
+    "@embedded-postgres/windows-x64@18.4.0-beta.17": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@remote-support/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remote-support/shared": "*",
+    "next": "^14.2.5",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4"
+  }
+}

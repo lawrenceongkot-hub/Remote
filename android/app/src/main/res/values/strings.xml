@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Remote Support</string>
+    <string name="signaling_base_url">http://10.0.2.2:3001</string>
+</resources>

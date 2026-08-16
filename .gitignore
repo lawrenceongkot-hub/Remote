@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+out/
+
+# Environment files (secrets — never commit)
+.env
+.env.*
+!.env.example
+packages/web/.env.local
+packages/server/.env
+
+# Local embedded PostgreSQL data
+.embedded-pg-data/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+
+# Android build artifacts
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.idea/
+android/captures/
+
+# Misc
+*.tsbuildinfo
+session.json
+postgresql-installer.exe
