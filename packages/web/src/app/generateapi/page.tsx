@@ -10,12 +10,14 @@ export default function GenerateApiPage() {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [operatorId, setOperatorId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [missingEnvVars, setMissingEnvVars] = useState<string[]>([]);
 
   useEffect(() => {
     fetch('/api/admin/status')
       .then((r) => r.json())
       .then((d) => {
         if (d.authenticated) setAuthed(true);
+        if (Array.isArray(d.missingEnvVars)) setMissingEnvVars(d.missingEnvVars);
       })
       .catch(() => {});
   }, []);
@@ -72,6 +74,22 @@ export default function GenerateApiPage() {
         <form onSubmit={login} className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8">
           <h1 className="mb-2 text-2xl font-bold">Admin Login</h1>
           <p className="mb-6 text-sm text-slate-400">Authenticate to manage API keys.</p>
+          {missingEnvVars.length > 0 && (
+            <div className="mb-4 rounded-lg border border-amber-800 bg-amber-950/40 px-4 py-3 text-sm text-amber-200">
+              <p className="mb-1 font-medium">Configuration Required</p>
+              <p className="mb-2 text-xs">
+                Set these environment variables in your Vercel project settings (or .env.local for local dev),
+                then redeploy. The application fails securely — it will not start with insecure defaults.
+              </p>
+              <ul className="list-inside list-disc text-xs">
+                {missingEnvVars.map((name) => (
+                  <li key={name} className="font-mono">
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {error && (
             <div className="mb-4 rounded-lg border border-red-800 bg-red-950/50 px-4 py-3 text-sm text-red-300">
               {error}

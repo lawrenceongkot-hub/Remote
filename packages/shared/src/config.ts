@@ -26,6 +26,20 @@ export function getAdminCredentials(): { username: string; password: string } {
   return { username, password };
 }
 
+/**
+ * Returns the names of required environment variables that are missing.
+ * Used by the admin UI to guide configuration — never the values.
+ */
+export function getMissingEnvVars(): string[] {
+  const required = [
+    'ADMIN_USERNAME',
+    'ADMIN_PASSWORD',
+    'SESSION_SECRET',
+    'DATABASE_URL',
+  ];
+  return required.filter((name) => !process.env[name] || process.env[name]?.trim() === '');
+}
+
 export function getPublicBaseUrl(): string {
   return (
     process.env.NEXT_PUBLIC_APP_URL ||
