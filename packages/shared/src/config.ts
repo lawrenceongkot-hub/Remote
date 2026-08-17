@@ -41,12 +41,18 @@ export function getMissingEnvVars(): string[] {
 }
 
 export function getPublicBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.PUBLIC_BASE_URL ||
-    (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : undefined) ||
-    ''
-  );
+  const configured = process.env.NEXT_PUBLIC_APP_URL || process.env.PUBLIC_BASE_URL;
+  if (configured) return configured;
+  // In development the Next.js app runs on :3000 and the signaling server on :3001.
+  if (process.env.NODE_ENV !== 'production') {
+    return 'http://localhost:3000';
+  }
+  // In production the app URL is injected by Vercel (PUBLIC_APP_URL). No localhost fallback.
+  const url = process.env.PUBLIC_APP_URL;
+  if (!url) {
+    throw new Error('[config] PUBLIC_APP_URL is not set in the production environment. Refusing to start with an insecure default.');
+  }
+  return url;
 }
 
 export function getSessionTtlMs(): number {
