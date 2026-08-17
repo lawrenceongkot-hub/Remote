@@ -41,18 +41,28 @@ export function getMissingEnvVars(): string[] {
 }
 
 export function getPublicBaseUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_APP_URL || process.env.PUBLIC_BASE_URL;
-  if (configured) return configured;
-  // In development the Next.js app runs on :3000 and the signaling server on :3001.
-  if (process.env.NODE_ENV !== 'production') {
-    return 'http://localhost:3000';
-  }
-  // In production the app URL is injected by Vercel (PUBLIC_APP_URL). No localhost fallback.
-  const url = process.env.PUBLIC_APP_URL;
-  if (!url) {
-    throw new Error('[config] PUBLIC_APP_URL is not set in the production environment. Refusing to start with an insecure default.');
-  }
-  return url;
+  return (
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.PUBLIC_BASE_URL ||
+    process.env.PUBLIC_APP_URL ||
+    (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '')
+  );
+}
+
+/**
+ * Returns the browser-accessible WebSocket signaling URL.
+ * In production this must be the real WSS endpoint of the deployed
+ * signaling server. Returns '' (empty) when not configured — callers
+ * should report a clear diagnostic rather than fall back to localhost.
+ */
+export function getPublicWsUrl(): string {
+  const url =
+    process.env.PUBLIC_WS_URL ||
+    process.env.NEXT_PUBLIC_WS_URL ||
+    process.env.SIGNALING_SERVER_URL;
+  if (url) return url;
+  if (process.env.NODE_ENV === 'development') return 'ws://localhost:3001/ws';
+  return '';
 }
 
 export function getSessionTtlMs(): number {

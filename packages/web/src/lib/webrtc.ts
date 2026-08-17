@@ -65,8 +65,10 @@ export function wsUrl(): string {
     const host = process.env.NEXT_PUBLIC_WS_HOST || 'localhost:3000';
     return `${proto}//${host}/ws`;
   }
-  const host = window.location.host;
-  return `${proto}//${host}/ws`;
+  // Production: must be explicitly configured or signaling is broken. NO localhost fallback.
+  const url = process.env.PUBLIC_WS_URL || process.env.SIGNALING_SERVER_URL;
+  if (!url) return '';
+  return url;
 }
 
 export function getIceServers(): Promise<IceServerConfig[]> {
