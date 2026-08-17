@@ -47,7 +47,11 @@ export async function POST(req: Request) {
       lastError: null,
     });
 
-    const baseUrl = getPublicBaseUrl() || 'http://localhost:3000';
+    const baseUrl = getPublicBaseUrl();
+    if (!baseUrl && process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'Server configuration error: PUBLIC_APP_URL not set in production' }, { status: 500 });
+    }
+    const resolvedBaseUrl = baseUrl || 'http://localhost:3000';
     const pairingUrl = `${baseUrl}/pair/${sessionId}?token=${encodeURIComponent(pairingToken)}&operator=${encodeURIComponent(operator.operatorName)}`;
     const qrDataUrl = await QRCode.toDataURL(pairingUrl, {
       errorCorrectionLevel: 'M',

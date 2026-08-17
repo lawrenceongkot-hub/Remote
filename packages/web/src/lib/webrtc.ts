@@ -61,11 +61,11 @@ export function wsUrl(): string {
   const configured = process.env.NEXT_PUBLIC_WS_URL;
   if (configured) return configured;
   const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  // In development the signaling server runs separately on :3001.
-  const host =
-    process.env.NODE_ENV === 'development'
-      ? process.env.NEXT_PUBLIC_WS_HOST || 'localhost:3001'
-      : window.location.host;
+  if (process.env.NODE_ENV !== 'production') {
+    const host = process.env.NEXT_PUBLIC_WS_HOST || 'localhost:3000';
+    return `${proto}//${host}/ws`;
+  }
+  const host = window.location.host;
   return `${proto}//${host}/ws`;
 }
 
